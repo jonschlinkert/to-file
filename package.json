@@ -1,0 +1,48 @@
+{
+  "name": "to-file",
+  "description": "Convert a file path to a vinyl file.",
+  "version": "0.1.0",
+  "homepage": "https://github.com/jonschlinkert/to-file",
+  "author": "Jon Schlinkert (https://github.com/jonschlinkert)",
+  "repository": "jonschlinkert/to-file",
+  "bugs": {
+    "url": "https://github.com/jonschlinkert/to-file/issues"
+  },
+  "license": "MIT",
+  "files": [
+    "index.js"
+  ],
+  "main": "index.js",
+  "engines": {
+    "node": ">=0.10.0"
+  },
+  "scripts": {
+    "test": "mocha"
+  },
+  "dependencies": {
+    "define-property": "^0.2.5",
+    "file-contents": "^0.2.4",
+    "glob-parent": "^2.0.0",
+    "is-valid-glob": "^0.3.0",
+    "lazy-cache": "^0.2.3",
+    "vinyl": "^1.0.0"
+  },
+  "devDependencies": {
+    "glob": "^5.0.15",
+    "gulp": "^3.9.0",
+    "gulp-istanbul": "^0.10.1",
+    "gulp-jshint": "^1.11.2",
+    "gulp-mocha": "^2.1.3",
+    "jshint-stylish": "^2.0.1",
+    "mocha": "*"
+  },
+  "keywords": [],
+  "verb": {
+    "related": {
+      "list": [
+        "to-vinyl",
+        "to-template"
+      ]
+    }
+  }
+}
