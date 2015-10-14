@@ -19,8 +19,8 @@ module.exports = function toFile(filepath, pattern, options) {
   options = options || {};
 
   var file = options.file || { contents: null };
-  file.cwd = path.resolve(options.cwd || '');
-  file.base = options.base;
+  file.cwd = path.join(options.cwd || '');
+  file.base = options.base || '';
   file.path = path.join(file.cwd, filepath);
 
   if (!file.base && pattern) {
@@ -30,16 +30,24 @@ module.exports = function toFile(filepath, pattern, options) {
     }
     var base = utils.parent(glob);
     if (base !== '.') {
-      file.base = path.resolve(base);
+      file.base = base;
     }
   }
 
   file = new utils.File(file);
+  if (options.stat) {
+    file.stat = options.stat;
+    delete options.stat;
+  }
+
+  if (file.base === '.') {
+    file.base = '';
+  }
 
   file.options = options;
   file.options.orig = filepath;
 
-  stats(file);
+  if (!file.stat) stats(file);
   contents(file, options);
   return file;
 };

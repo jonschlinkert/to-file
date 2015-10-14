@@ -47,11 +47,11 @@ describe('toFile', function () {
     assert(typeof file.stat.isSymbolicLink === 'function');
   });
 
-  it('should expose the absolute path on `path`:', function () {
+  it('should expose `file.path`:', function () {
     var file = toFile('index.js');
     assert(file.path);
     assert(typeof file.path === 'string');
-    assert(file.path === path.resolve('index.js'));
+    assert(file.path === 'index.js');
   });
 
   it('should expose the stat object on `stat`:', function () {
@@ -66,40 +66,38 @@ describe('toFile', function () {
     var file = toFile('a.txt', {cwd: 'fixtures'});
     assert(file.cwd);
     assert(typeof file.cwd === 'string');
-    assert(file.cwd === path.resolve('fixtures'));
+    assert(file.cwd === 'fixtures');
   });
 
   it('should resolve the abolute path using cwd:', function () {
     var file = toFile('a.txt', {cwd: 'fixtures'});
-    assert(file.path === path.resolve('fixtures/a.txt'));
+    assert(file.path === 'fixtures/a.txt');
   });
 
   it('should expose `base`:', function () {
     var file = toFile('index.js');
-    assert(file.base);
     assert(typeof file.base === 'string');
-    assert(file.base === path.resolve(''));
+    assert(file.base === '');
   });
 
   it('should get the glob parent from the glob pattern:', function () {
     var file = toFile('a.txt', 'fixtures/*.js');
     assert(file.base);
     assert(typeof file.base === 'string');
-    assert(file.base === path.resolve('fixtures'));
+    assert(file.base === 'fixtures');
   });
 
   it('should get the glob parent an array of glob patterns:', function () {
     var file = toFile('a.txt', ['fixtures/*.js']);
     assert(file.base);
     assert(typeof file.base === 'string');
-    assert(file.base === path.resolve('fixtures'));
+    assert(file.base === 'fixtures');
   });
 
   it('should not update the glob base when pattern is ".":', function () {
     var file = toFile('index.js', ['*.js']);
-    assert(file.base);
     assert(typeof file.base === 'string');
-    assert(file.base === process.cwd());
+    assert(file.base === '');
   });
 
   it('should expose `file.options`', function () {
