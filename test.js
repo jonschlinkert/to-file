@@ -51,7 +51,7 @@ describe('toFile', function () {
     var file = toFile('index.js');
     assert(file.path);
     assert(typeof file.path === 'string');
-    assert(file.path === 'index.js');
+    assert(file.path === path.resolve('index.js'));
   });
 
   it('should expose the stat object on `stat`:', function () {
@@ -66,18 +66,18 @@ describe('toFile', function () {
     var file = toFile('a.txt', {cwd: 'fixtures'});
     assert(file.cwd);
     assert(typeof file.cwd === 'string');
-    assert(file.cwd === 'fixtures');
+    assert(file.cwd === path.resolve('fixtures'));
   });
 
   it('should resolve the abolute path using cwd:', function () {
     var file = toFile('a.txt', {cwd: 'fixtures'});
-    assert(file.path === 'fixtures/a.txt');
+    assert(file.path === path.resolve('fixtures/a.txt'));
   });
 
   it('should expose `base`:', function () {
     var file = toFile('index.js');
     assert(typeof file.base === 'string');
-    assert(file.base === '');
+    assert(file.base === path.resolve(''));
   });
 
   it('should get the glob parent from the glob pattern:', function () {
@@ -97,7 +97,7 @@ describe('toFile', function () {
   it('should not update the glob base when pattern is ".":', function () {
     var file = toFile('index.js', ['*.js']);
     assert(typeof file.base === 'string');
-    assert(file.base === '');
+    assert(file.base === path.resolve(''));
   });
 
   it('should expose `file.options`', function () {

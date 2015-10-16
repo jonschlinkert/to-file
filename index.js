@@ -19,9 +19,9 @@ module.exports = function toFile(filepath, pattern, options) {
   options = options || {};
 
   var file = options.file || { contents: null };
-  file.cwd = path.join(options.cwd || '');
+  file.cwd = path.resolve(options.cwd || '');
   file.base = options.base || '';
-  file.path = path.join(file.cwd, filepath);
+  file.path = path.resolve(file.cwd, filepath);
 
   if (!file.base && pattern) {
     var glob = pattern;
