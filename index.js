@@ -16,11 +16,11 @@ module.exports = function toFile(filepath, pattern, options) {
     pattern = null;
   }
 
-  options = options || {};
+  var opts = utils.extend({}, options);
 
-  var file = options.file || { contents: null };
-  file.cwd = path.resolve(options.cwd || '');
-  file.base = options.base || '';
+  var file = opts.file || { contents: null };
+  file.cwd = path.resolve(opts.cwd || '');
+  file.base = opts.base || '';
   file.path = path.resolve(file.cwd, filepath);
 
   if (!file.base && pattern) {
@@ -35,20 +35,20 @@ module.exports = function toFile(filepath, pattern, options) {
   }
 
   file = new utils.File(file);
-  if (options.stat) {
-    file.stat = options.stat;
-    delete options.stat;
+  if (opts.stat) {
+    file.stat = opts.stat;
+    delete opts.stat;
   }
 
   if (file.base === '.') {
     file.base = '';
   }
 
-  file.options = options;
+  file.options = opts;
   file.options.orig = filepath;
 
   if (!file.stat) stats(file);
-  contents(file, options);
+  contents(file, opts);
   return file;
 };
 

@@ -12,6 +12,7 @@ var fn = require;
 require = utils;
 require('define-property', 'define');
 require('file-contents', 'contents');
+require('extend-shallow', 'extend');
 require('glob-parent', 'parent');
 require('is-valid-glob');
 require('vinyl', 'File');
