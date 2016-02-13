@@ -18,7 +18,7 @@ module.exports = function toFile(filepath, pattern, options) {
 
   var opts = utils.extend({}, options);
 
-  var file = opts.file || { contents: null };
+  var file = utils.isObject(opts.file) ? opts.file : { contents: null };
   file.cwd = path.resolve(opts.cwd || '');
   file.base = opts.base || '';
   file.path = path.resolve(file.cwd, filepath);
@@ -34,7 +34,11 @@ module.exports = function toFile(filepath, pattern, options) {
     }
   }
 
-  file = new utils.File(file);
+  var File = typeof opts.File !== 'function'
+    ? utils.File
+    : opts.File;
+
+  file = new File(file);
   if (opts.stat) {
     file.stat = opts.stat;
     delete opts.stat;
