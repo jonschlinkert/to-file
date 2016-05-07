@@ -1,7 +1,7 @@
 {
   "name": "to-file",
   "description": "Convert a file path to a vinyl file.",
-  "version": "0.1.7",
+  "version": "0.2.0",
   "homepage": "https://github.com/jonschlinkert/to-file",
   "author": "Jon Schlinkert (https://github.com/jonschlinkert)",
   "repository": "jonschlinkert/to-file",
