@@ -11,47 +11,42 @@ var path = require('path');
 var utils = require('./utils');
 
 module.exports = function toFile(filepath, pattern, options) {
-  if (!utils.isValidGlob(pattern)) {
+  var isPattern = utils.isValidGlob(pattern);
+  if (!isPattern) {
     options = pattern;
     pattern = null;
   }
-
   var opts = utils.extend({}, options);
+  var obj = { contents: null };
 
-  var file = utils.isObject(opts.file) ? opts.file : { contents: null };
-  file.cwd = path.resolve(opts.cwd || '');
-  file.base = opts.base || '';
-  file.path = path.resolve(file.cwd, filepath);
+  obj.cwd = path.resolve(opts.cwd || process.cwd());
+  obj.path = path.resolve(obj.cwd, filepath);
 
-  if (!file.base && pattern) {
-    var glob = pattern;
-    if (Array.isArray(glob)) {
-      glob = pattern[0];
+  if (isPattern) {
+    if (Array.isArray(pattern)) {
+      pattern = pattern[0];
     }
-    var base = utils.parent(glob);
-    if (base !== '.') {
-      file.base = base;
-    }
+    obj.base = path.resolve(obj.cwd, utils.parent(pattern));
+  } else {
+    obj.base = path.resolve(opts.base || obj.cwd);
   }
 
-  var File = typeof opts.File !== 'function'
-    ? utils.File
-    : opts.File;
+  var File = typeof opts.File === 'function' ? opts.File : utils.File;
+  var file = new File(obj);
+  file.options = opts;
 
-  file = new File(file);
-  if (opts.stat) {
-    file.stat = opts.stat;
+  if (opts.file) {
+    for (var key in opts.file) {
+      file[key] = opts.file[key];
+    }
+    delete opts.file;
+  }
+
+  if (!file.stat) {
+    file.stat = opts.stat || stats(file);
     delete opts.stat;
   }
 
-  if (file.base === '.') {
-    file.base = '';
-  }
-
-  file.options = opts;
-  file.options.orig = filepath;
-
-  if (!file.stat) stats(file);
   contents(file, opts);
   return file;
 };
@@ -59,8 +54,12 @@ module.exports = function toFile(filepath, pattern, options) {
 function stats(file) {
   utils.define(file, '_stat', null);
   utils.define(file, 'stat', {
+    configurable: true,
+    set: function(stat) {
+      this._stat = stat;
+    },
     get: function() {
-      return this._stat || (this._stat = utils.tryStat(file.path));
+      return this._stat || (this._stat = utils.tryStat(this.path));
     }
   });
 }
@@ -68,12 +67,13 @@ function stats(file) {
 function contents(file, opts) {
   utils.define(file, '_contents', null);
   utils.define(file, 'contents', {
+    configurable: true,
+    set: function(contents) {
+      this._contents = contents;
+    },
     get: function() {
       utils.contents.sync(this, opts);
       return this._contents;
-    },
-    set: function(val) {
-      this._contents = val;
     }
   });
 }
